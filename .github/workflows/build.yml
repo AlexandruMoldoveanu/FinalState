@@ -1,1 +1,16 @@
+name: CI-Build
 
+on:
+    pull_request:
+        branches:
+            - 'develop'
+
+    workflow_dispatch:
+
+jobs:
+    CI-Build:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - name: Build project
+              run: Code/build.bat
