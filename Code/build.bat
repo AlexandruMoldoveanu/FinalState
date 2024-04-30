@@ -1,7 +1,8 @@
 @echo off
 setlocal
-
-gcc Main.c
+echo Exit error level: %errorlevel%
+echo 
+gcc Code/Main.c
 echo Exit error level: %errorlevel%
 exit /b %errorlevel%
 
