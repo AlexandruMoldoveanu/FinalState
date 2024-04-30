@@ -16,5 +16,6 @@ jobs:
             - uses: actions/checkout@v4
             - name: Build project
               run: |
-                cd %github_workspace%\Code
+                echo 
+                cd %GITHUB_WORKSPACE%\Code
                 build.bat
