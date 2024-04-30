@@ -15,4 +15,4 @@ jobs:
               run: git config --global core.longpaths true
             - uses: actions/checkout@v4
             - name: Build project
-              run: build.bat
+              run: Code/build.bat
