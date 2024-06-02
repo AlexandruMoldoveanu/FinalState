@@ -4,6 +4,10 @@ Status:<br>
 2.Configurare runner.<br>
 3.Testare reusita pentru un Hello Word<br>
 4.Implementare script pentru Interfata<br>
-5.Adaptarea scriptului pentru a clona un proiect(momentan e eroare daca este clonat deja acel proiect)<br>
+5.Rezolvat problema clonatului(daca proiectul era deja clonat dadea eroare)<br>
+6.Adaugarea parserului pentru erori/warninguri<br>
+7.Adaptarea meniului<br>
+8.[TBD]:Integrarea scripturilor in workflow<br>
+
 
 <br>
