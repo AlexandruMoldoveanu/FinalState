@@ -35,5 +35,5 @@ jobs:
                 else
                   echo "No Result.txt files found"
                 fi
-              shell: bash
+              shell: powershell
               
