@@ -22,4 +22,4 @@ jobs:
                 Write-Host "Running script with parameter: $_"
                 python Interface.py $_
                 }
-              shell: pwsh
+              shell: powershell
