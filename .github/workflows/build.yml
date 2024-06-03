@@ -23,14 +23,17 @@ jobs:
                 python Interface.py $_
                 }
               shell: powershell
-            - name: Configure Git user
+            - name: Search for Result.txt and commit if found
               run: |
-                git config --local user.email "action@github.com"
-                git config --local user.name "Github Action"
-            - name: Stage ,commit and push changes
-              run: |
-                git add .
-                git commit -m "Update repos"
-                git push
-              continue-on-error: true
+                files=$(find . -type f -name "Result.txt")
+                if [ -n "$files" ]; then
+                  echo "Found Result.txt files:"
+                  echo "$files"
+                  git add $files
+                  git commit -m "Add all Result.txt files"
+                  git push
+                else
+                  echo "No Result.txt files found"
+                fi
+              shell: bash
               
