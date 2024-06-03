@@ -14,5 +14,12 @@ jobs:
             - name: Support long file names
               run: git config --global core.longpaths true
             - uses: actions/checkout@v4
-            - name: Build project
-              run: Code/build.bat
+            - name: Run script with parameters
+              run: |
+                cd Code
+                echo "Reading parameters from file..."
+                Get-Content GithubRepos.txt | ForEach-Object {
+                Write-Host "Running script with parameter: $_"
+                python Interface.py $_
+                }
+              shell: powershell
