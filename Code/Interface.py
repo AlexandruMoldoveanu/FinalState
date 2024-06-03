@@ -3,40 +3,47 @@ import subprocess
 import re
 import os
 import shutil
+import argparse
 project_path = ''
 project_name = ''
 
 def menu():
-    while True:
-        print("What do you wanna do?")
-        print("1. Clone a repository")
-        print("2. Clone and generate a new report")
-        print("3. Open last report")
-        print("4. Exit")
-
-        choice = input("Please choose an option (1-4): ")
-
-        if choice == '1':
-            link_for_clone()
-        elif choice == '2':
-            link_for_clone()
-            generate_report(project_path)
-            print_results()
-        elif choice == '3':
-            open_test_report()
-        elif choice == '4':
-            print("Exiting...")
-            break
-        else:
-            print("Invalid choice, please choose again.")
+    parser = argparse.ArgumentParser(description='Process some parameters.')
+    parser.add_argument('param1', nargs='?', help='First parameter')
+    args = parser.parse_args()
+    if args.param1:
+        link_for_clone(args.param1)
+        generate_report()
+    else:
+        while True:
+            print("What do you wanna do?")
+            print("1. Clone a repository")
+            print("2. Clone and generate a new report")
+            print("3. Open last report")
+            print("4. Exit")
+        
+            choice = input("Please choose an option (1-4): ")
+        
+            if choice == '1':
+                link = input("Please enter a link: ")
+                link_for_clone(link)
+            elif choice == '2':
+                link_for_clone()
+                generate_report()
+                print_results()
+            elif choice == '3':
+                open_test_report()
+            elif choice == '4':
+                print("Exiting...")
+                break
+            else:
+                print("Invalid choice, please choose again.")
 
 def remove_readonly(func, path, excinfo):
     os.chmod(path, 0o777)
     func(path)
     
-def link_for_clone():
-    print("Provide a link for a github repository")
-    link = input("Please enter a link: ")
+def link_for_clone(link):
     global project_path
     global project_name
     project_path = os.getcwd()
@@ -44,22 +51,22 @@ def link_for_clone():
     if match:
         project_name = match.group(1)
         project_path = project_path + '\\' + project_name
+        if os.path.exists(project_path):
+            try:
+                shutil.rmtree(project_path, onerror=remove_readonly)
+                print(f"Deleted directory: {project_path}")
+            except PermissionError as e:
+                print(f"PermissionError: {e}")
+        else:
+            print(f"Directory does not exist: {project_path}")
+        subprocess.run(['git', 'clone', link], check=True)
     else:
-        print("Your repo name was wrong")
+        print("Your repo link was wrong")
+        sys.exit(0)
     print(f"You entered: {link}")
     
-    if os.path.exists(project_path):
-        try:
-            shutil.rmtree(project_path, onerror=remove_readonly)
-            print(f"Deleted directory: {project_path}")
-        except PermissionError as e:
-            print(f"PermissionError: {e}")
-    else:
-        print(f"Directory does not exist: {project_path}")
-    
-    subprocess.run(['git', 'clone', link], check=True)
 
-def generate_report(project_path):
+def generate_report():
     cppcheck_cmd = [
         'cppcheck',
         '--enable=all',
