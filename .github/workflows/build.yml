@@ -16,3 +16,17 @@ jobs:
             - uses: actions/checkout@v4
             - name: Build project
               run: python Interface.py https://github.com/langroodi/Adaptive-AUTOSAR.git
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                python-version: '3.12'
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+            - name: Run script with parameters
+              run: |
+                echo "Reading parameters from file..."
+                Get-Content GithubRepos.txt | ForEach-Object {
+                Write-Host "Running script with parameter: $_"
+                python Interface.py $_
+                }
+              shell: pwsh
