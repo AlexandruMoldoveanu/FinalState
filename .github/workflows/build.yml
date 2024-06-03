@@ -25,15 +25,14 @@ jobs:
               shell: powershell
             - name: Search for Result.txt and commit if found
               run: |
-                files=$(find . -type f -name "Result.txt")
-                if [ -n "$files" ]; then
-                  echo "Found Result.txt files:"
-                  echo "$files"
+                $files = Get-ChildItem -Path . -Filter "Result.txt" -Recurse
+                if ($files) {
+                  Write-Host "Found Result.txt files:"
+                  $files | ForEach-Object { Write-Host $_.FullName }
                   git add $files
                   git commit -m "Add all Result.txt files"
                   git push
-                else
-                  echo "No Result.txt files found"
-                fi
+                } else {
+                  Write-Host "No Result.txt files found"
+                }
               shell: powershell
-              
