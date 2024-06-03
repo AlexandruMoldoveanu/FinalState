@@ -15,7 +15,7 @@ jobs:
               run: git config --global core.longpaths true
             - uses: actions/checkout@v4
             - name: Install dependencies
-              run: pip install -r requirements.txt
+              run: pip install -r GithubRepos.txt
             - name: Run script with parameters
               run: |
                 cd Code
