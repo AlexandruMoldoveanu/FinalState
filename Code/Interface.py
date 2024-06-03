@@ -57,8 +57,6 @@ def link_for_clone(link):
                 print(f"Deleted directory: {project_path}")
             except PermissionError as e:
                 print(f"PermissionError: {e}")
-        else:
-            print(f"Directory does not exist: {project_path}")
         subprocess.run(['git', 'clone', link], check=True)
     else:
         print("Your repo link was wrong")
