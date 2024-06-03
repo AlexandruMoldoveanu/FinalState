@@ -23,3 +23,14 @@ jobs:
                 python Interface.py $_
                 }
               shell: powershell
+            - name: Configure Git user
+              run: |
+                git config --local user.email "action@github.com"
+                git config --local user.name "Github Action"
+            - name: Stage ,commit and push changes
+              run: |
+                git add .
+                git commit -m "Update repos"
+                git push
+              continue-on-error: true
+              
