@@ -1,59 +1,25 @@
 name: CI-Build
 
 on:
-  pull_request:
-    branches:
-      - 'develop'
-  workflow_dispatch:
+    pull_request:
+        branches:
+            - 'develop'
+
+    workflow_dispatch:
 
 jobs:
-  CI-Build:
-    runs-on: self-hosted
-    steps:
-      - name: Support long file names
-        run: git config --global core.longpaths true
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set safe directory for git
-        run: |
-          git config --global --add safe.directory F:/runner/actions-runner/_work/FinalState/FinalState
-          git config --global --add safe.directory $GITHUB_WORKSPACE
-
-      - name: Display directory structure
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Listing current directory:"
-          ls -al
-          echo "Listing Code directory:"
-          ls -al Code
-
-      - name: Run script with parameters
-        run: |
-          cd Code
-          echo "Reading parameters from file..."
-          Get-Content GithubRepos.txt | ForEach-Object {
-            Write-Host "Running script with parameter: $_"
-            python Interface.py $_
-          }
-        shell: powershell
-
-      - name: Search for Result.txt and commit if found
-        run: |
-          $files = Get-ChildItem -Path . -Filter "Result.txt" -Recurse
-          if ($files) {
-            Write-Host "Found Result.txt files:"
-            $files | ForEach-Object { Write-Host $_.FullName }
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            $files | ForEach-Object { git add $_.FullName }
-            git commit -m "Add all Result.txt files"
-            git push https://$env:GH_PAT@github.com/${{ github.repository }}.git
-          } else {
-            Write-Host "No Result.txt files found"
-          }
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        shell: powershell
+    CI-Build:
+        runs-on: self-hosted
+        steps:
+            - name: Support long file names
+              run: git config --global core.longpaths true
+            - uses: actions/checkout@v4
+            - name: Run script with parameters
+              run: |
+                cd Code
+                echo "Reading parameters from file..."
+                Get-Content GithubRepos.txt | ForEach-Object {
+                Write-Host "Running script with parameter: $_"
+                python Interface.py $_
+                }
+              shell: powershell
