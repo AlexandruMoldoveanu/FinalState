@@ -28,14 +28,14 @@ jobs:
 
       - name: Search for Result.txt and commit if found
         run: |
-          $files = Get-ChildItem -Path . -Filter "Result.txt" -Recurse
+          $files = Get-ChildItem -Path . -Filter "result.txt" -Recurse
           if ($files) {
-            Write-Host "Found Result.txt files:"
+            Write-Host "Found result.txt files:"
             $files | ForEach-Object { Write-Host $_.FullName }
             git config --global user.email "actions@github.com"
             git config --global user.name "GitHub Action"
             $files | ForEach-Object { git add $_.FullName }
-            git commit -m "Add all Result.txt files"
+            git commit -m "Add all result.txt files"
             git push 
           } else {
             Write-Host "No Result.txt files found"
