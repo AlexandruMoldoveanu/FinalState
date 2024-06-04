@@ -11,13 +11,17 @@ jobs:
             - name: Support long file names
               run: git config --global core.longpaths true
             - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.11.7'  # specify the required Python version
             - name: Run script with parameters
               run: |
                 cd Code
                 echo "Reading parameters from file..."
                 Get-Content GithubRepos.txt | ForEach-Object {
-                Write-Host "Running script with parameter: $_"
-                python Interface.py $_
+                  Write-Host "Running script with parameter: $_"
+                  python Interface.py $_
                 }
               shell: powershell
             - name: Search for Result.txt and commit if found
@@ -31,5 +35,4 @@ jobs:
                   git push
                 else
                   echo "No Result.txt files found"
-                fi
-              shell: powershell
+              shell: bash
