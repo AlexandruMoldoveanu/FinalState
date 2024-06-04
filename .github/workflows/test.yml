@@ -8,3 +8,6 @@ jobs:
             - name: Support long file names
               run: git config --global core.longpaths true
             - uses: actions/checkout@v4
+            - name: Run python
+              run: python --version
+              shell: cmd
