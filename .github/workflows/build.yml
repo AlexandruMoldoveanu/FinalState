@@ -28,21 +28,27 @@ jobs:
 
       - name: Search for Result.txt and commit if found
         run: |
+          cd $env:GITHUB_WORKSPACE
           $files = Get-ChildItem -Path . -Filter "result.txt" -Recurse
           if ($files) {
             Write-Host "Found result.txt files:"
             $files | ForEach-Object { Write-Host $_.FullName }
+
+            $destination = "$env:GITHUB_WORKSPACE/Code/Result"
+            if (!(Test-Path -Path $destination)) {
+              New-Item -ItemType Directory -Path $destination
+            }
+
+            $files | ForEach-Object { Copy-Item -Path $_.FullName -Destination $destination }
+            Write-Host "Copied result.txt files to $destination"
+          } else {
+            Write-Host "No result.txt files found"
+          }
             git config --global user.email "actions@github.com"
             git config --global user.name "GitHub Action"
-            $files | ForEach-Object { 
-              git add $_.FullName 
-            }
-            if (git diff --cached --name-only) {
-              git commit -m "Add all result.txt files"
-              git push 
-            } else {
-              Write-Host "No changes to commit"
-            }
+            git add Code/Result
+            git commit -m "Add all result.txt files"
+            git push 
           } else {
             Write-Host "No Result.txt files found"
           }
