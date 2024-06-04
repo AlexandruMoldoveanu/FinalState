@@ -15,13 +15,13 @@ Status:<br>
 13.Rezolvat interfata din Grafana[TBD]<br>
 14.Setat jobul de nightly,sa ruleze in fiecare seara si sa stranga metricile[TBD]<br>
 
-#Tooluri:<br>
+Tooluri:<br>
 -github<br>
 -git bash<br>
 -prometeus<br>
 -Grafana<br>
 
-#Scripturi:<br>
+Scripturi:<br>
 -Python<br>
 -yaml<br>
 
