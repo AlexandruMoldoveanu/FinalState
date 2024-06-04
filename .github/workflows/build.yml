@@ -11,10 +11,6 @@ jobs:
             - name: Support long file names
               run: git config --global core.longpaths true
             - uses: actions/checkout@v4
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.11.7'  # specify the required Python version
             - name: Run script with parameters
               run: |
                 cd Code
