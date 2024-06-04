@@ -10,10 +10,10 @@ Status:<br>
 8.Adaptare scripturi pe workflow<br>
 9.Setare runner de git sa fie service<br>
 10.Adaugare script pentru parsarea erorilor si trimiterea lor in prometheus<br>
-11.Configurat prometheus si Grafana<br>
-12.Colectat metricile din prometeus in Grafana<br>
-13.Rezolvat interfata din Grafana<br>
-14.Setat jobul de nightly,sa ruleze in fiecare seara si sa stranga metricile.<br>
+11.Configurat prometheus si Grafana[TBD]<br>
+12.Colectat metricile din prometeus in Grafana[TBD]<br>
+13.Rezolvat interfata din Grafana[TBD]<br>
+14.Setat jobul de nightly,sa ruleze in fiecare seara si sa stranga metricile[TBD]<br>
 
 
 <br>
