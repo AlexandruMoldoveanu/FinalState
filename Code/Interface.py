@@ -28,7 +28,8 @@ def menu():
                 link = input("Please enter a link: ")
                 link_for_clone(link)
             elif choice == '2':
-                link_for_clone()
+                link = input("Please enter a link: ")
+                link_for_clone(link)
                 generate_report()
                 print_results()
             elif choice == '3':
