@@ -32,11 +32,11 @@ jobs:
           if ($files) {
             Write-Host "Found Result.txt files:"
             $files | ForEach-Object { Write-Host $_.FullName }
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git config --global user.email "actions@github.com"
+            git config --global user.name "GitHub Action"
             $files | ForEach-Object { git add $_.FullName }
             git commit -m "Add all Result.txt files"
-            git push https://$env:GH_PAT@github.com/${{ github.repository }}.git
+            git push 
           } else {
             Write-Host "No Result.txt files found"
           }
