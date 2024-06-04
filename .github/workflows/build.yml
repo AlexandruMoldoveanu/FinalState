@@ -17,7 +17,7 @@ jobs:
                 echo "Reading parameters from file..."
                 Get-Content GithubRepos.txt | ForEach-Object {
                   Write-Host "Running script with parameter: $_"
-                  python Interface.py $_
+                  py Interface.py $_
                 }
               shell: powershell
             - name: Search for Result.txt and commit if found
