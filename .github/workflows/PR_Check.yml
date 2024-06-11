@@ -26,7 +26,7 @@ jobs:
           }
         shell: powershell
 
-      - name: Search for Result files and commit if found
+      - name: Search for Result files and save old versions
         run: |
           cd $env:GITHUB_WORKSPACE
           $fileTypes = @("result.txt", "parsed_results.txt")
@@ -45,6 +45,12 @@ jobs:
               $files | ForEach-Object { 
                 $repoName = $_.FullName -replace '^.*Code\\([^\\]+)\\.*$', '$1'
                 $newFileName = "$($fileType -replace '\.txt$', "_$repoName.txt")"
+                $oldFileName = "$($fileType -replace '\.txt$', "_$repoName_old.txt")"
+                
+                if (Test-Path -Path "$destination\$newFileName") {
+                  Move-Item -Path "$destination\$newFileName" -Destination "$destination\$oldFileName"
+                }
+
                 Copy-Item -Path $_.FullName -Destination "$destination\$newFileName" 
               }
               Write-Host "Copied $fileType files to $destination"
@@ -67,48 +73,80 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Count MISRA Messages
+      - name: Count MISRA Messages and Compare
         run: |
+          function Read-CountsFromFile {
+            param (
+              [string]$filePath
+            )
+            $content = Get-Content -Path $filePath
+            $errors = ($content -join "`n" | Select-String -Pattern 'Errors \((\d+)\)').Matches[0].Groups[1].Value
+            $warnings = ($content -join "`n" | Select-String -Pattern 'Warnings \((\d+)\)').Matches[0].Groups[1].Value
+            $information = ($content -join "`n" | Select-String -Pattern 'Information \((\d+)\)').Matches[0].Groups[1].Value
+            $style = ($content -join "`n" | Select-String -Pattern 'Style \((\d+)\)').Matches[0].Groups[1].Value
+            $notes = ($content -join "`n" | Select-String -Pattern 'Notes \((\d+)\)').Matches[0].Groups[1].Value
+
+            return [PSCustomObject]@{
+              Errors = [int]$errors
+              Warnings = [int]$warnings
+              Information = [int]$information
+              Style = [int]$style
+              Notes = [int]$notes
+            }
+          }
+
           $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
           foreach ($file in $files) {
             Write-Host "Processing file: $file.FullName"
-            
-            # Initialize counters
-            $errors = 0
-            $warnings = 0
-            $information = 0
-            $style = 0
-            $notes = 0
-            $section = ""
 
-            # Read and process file line by line
-            Get-Content -Path $file.FullName | ForEach-Object {
-              if ($_ -match 'Errors \(\d+\):') { $section = "errors" }
-              elseif ($_ -match 'Warnings \(\d+\):') { $section = "warnings" }
-              elseif ($_ -match 'Information \(\d+\):') { $section = "information" }
-              elseif ($_ -match 'Style \(\d+\):') { $section = "style" }
-              elseif ($_ -match 'Notes \(\d+\):') { $section = "notes" }
-              elseif ($section -ne "" -and $_ -ne "") {
-                switch ($section) {
-                  "errors" { $errors++ }
-                  "warnings" { $warnings++ }
-                  "information" { $information++ }
-                  "style" { $style++ }
-                  "notes" { $notes++ }
-                }
+            $oldFile = $file.FullName -replace '.txt$', '_old.txt'
+            if (Test-Path -Path $oldFile) {
+              $oldCounts = Read-CountsFromFile -filePath $oldFile
+            } else {
+              $oldCounts = [PSCustomObject]@{
+                Errors = 0
+                Warnings = 0
+                Information = 0
+                Style = 0
+                Notes = 0
               }
             }
 
-            Write-Host "Errors: $errors"
-            Write-Host "Warnings: $warnings"
-            Write-Host "Information: $information"
-            Write-Host "Style: $style"
-            Write-Host "Notes: $notes"
+            $newCounts = Read-CountsFromFile -filePath $file.FullName
 
-            echo "errors_$($file.Name)=$errors" >> $env:GITHUB_ENV
-            echo "warnings_$($file.Name)=$warnings" >> $env:GITHUB_ENV
-            echo "information_$($file.Name)=$information" >> $env:GITHUB_ENV
-            echo "style_$($file.Name)=$style" >> $env:GITHUB_ENV
-            echo "notes_$($file.Name)=$notes" >> $env:GITHUB_ENV
+            Write-Host "Old Counts: $oldCounts"
+            Write-Host "New Counts: $newCounts"
+
+            $increaseThreshold = 0.10
+
+            function Check-Increase {
+              param (
+                [int]$oldValue,
+                [int]$newValue,
+                [string]$type
+              )
+              if ($oldValue -gt 0) {
+                $increase = ($newValue - $oldValue) / $oldValue
+                if ($increase -gt $increaseThreshold) {
+                  Write-Error "$type count increased by more than 10%: Old=$oldValue, New=$newValue"
+                  exit 1
+                }
+              } elseif ($newValue -gt 0) {
+                Write-Error "$type count increased from 0 to $newValue"
+                exit 1
+              }
+            }
+
+            Check-Increase -oldValue $oldCounts.Errors -newValue $newCounts.Errors -type "Errors"
+            Check-Increase -oldValue $oldCounts.Warnings -newValue $newCounts.Warnings -type "Warnings"
+            Check-Increase -oldValue $oldCounts.Information -newValue $newCounts.Information -type "Information"
+            Check-Increase -oldValue $oldCounts.Style -newValue $newCounts.Style -type "Style"
+            Check-Increase -oldValue $oldCounts.Notes -newValue $newCounts.Notes -type "Notes"
+
+            echo "errors_$($file.Name)=$newCounts.Errors" >> $env:GITHUB_ENV
+            echo "warnings_$($file.Name)=$newCounts.Warnings" >> $env:GITHUB_ENV
+            echo "information_$($file.Name)=$newCounts.Information" >> $env:GITHUB_ENV
+            echo "style_$($file.Name)=$newCounts.Style" >> $env:GITHUB_ENV
+            echo "notes_$($file.Name)=$newCounts.Notes" >> $env:GITHUB_ENV
           }
         shell: powershell
