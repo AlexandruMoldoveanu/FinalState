@@ -4,6 +4,7 @@ import re
 import os
 import shutil
 import argparse
+
 project_path = ''
 project_name = ''
 
@@ -21,9 +22,9 @@ def menu():
             print("2. Clone and generate a new report")
             print("3. Open last report")
             print("4. Exit")
-        
+
             choice = input("Please choose an option (1-4): ")
-        
+
             if choice == '1':
                 link = input("Please enter a link: ")
                 link_for_clone(link)
@@ -43,7 +44,7 @@ def menu():
 def remove_readonly(func, path, excinfo):
     os.chmod(path, 0o777)
     func(path)
-    
+
 def link_for_clone(link):
     global project_path
     global project_name
@@ -63,9 +64,18 @@ def link_for_clone(link):
         print("Your repo link was wrong")
         sys.exit(0)
     print(f"You entered: {link}")
-    
+
+def rename_old_reports():
+    old_result = os.path.join(project_path, 'result.txt')
+    old_parsed_result = os.path.join(project_path, 'parsed_results.txt')
+    if os.path.exists(old_result):
+        shutil.move(old_result, old_result.replace('.txt', '_old.txt'))
+    if os.path.exists(old_parsed_result):
+        shutil.move(old_parsed_result, old_parsed_result.replace('.txt', '_old.txt'))
 
 def generate_report():
+    rename_old_reports()
+    
     cppcheck_cmd = [
         'cppcheck',
         '--enable=all',
@@ -81,19 +91,18 @@ def generate_report():
         subprocess.run(cppcheck_cmd, stderr=file)
         
     with open(output_file_parsed, 'w') as file:
-        subprocess.run(['python', 'Parser.py', project_name ,'n'])
+        subprocess.run(['python', 'Parser.py', project_name, 'n'])
 
 def print_results():
-    choice = input("Do you wanna see the result? Please respons with 'y' or 'n'. ")
+    choice = input("Do you wanna see the result? Please respond with 'y' or 'n'. ")
     if choice == 'y':
-        subprocess.run(['python', 'Parser.py', project_name ,'y'])
+        subprocess.run(['python', 'Parser.py', project_name, 'y'])
     if choice == 'n':
-        subprocess.run(['python', 'Parser.py', project_name ,'n'])
-    
+        subprocess.run(['python', 'Parser.py', project_name, 'n'])
+
 def open_test_report():
     choice = input("Please provide name of repo: ")
-    subprocess.run(['python', 'Parser.py', choice ,'y'])
+    subprocess.run(['python', 'Parser.py', choice, 'y'])
 
 if __name__ == "__main__":
     menu()
-
