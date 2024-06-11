@@ -138,6 +138,8 @@ jobs:
             Check-Increase -oldValue $oldCounts.Style -newValue $newCounts.Style -type "Style"
             Check-Increase -oldValue $oldCounts.Notes -newValue $newCounts.Notes -type "Notes"
 
+            # Move the new file to old file after comparison
+            Move-Item -Path $file.FullName -Destination $oldFile -Force
           } else {
             $newCounts = Read-CountsFromFile -filePath $file.FullName
             Write-Host "No old file found, skipping comparison."
@@ -156,6 +158,3 @@ jobs:
         git commit -m "Update MISRA counts after comparison"
         git push 
       shell: powershell
-
-
-        
