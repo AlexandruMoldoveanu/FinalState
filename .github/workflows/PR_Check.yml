@@ -56,7 +56,7 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Action"
           git add Code/Result
-          git commit -m "Add all result.txt files"
+          git commit -m "Add all result.txt and parsed_results.txt files"
           git push 
         shell: powershell
 
@@ -72,11 +72,12 @@ jobs:
           $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
           foreach ($file in $files) {
             Write-Host "Processing file: $file"
-            $errors = (Select-String -Pattern '^Errors' -Path $file.FullName | Measure-Object).Count
-            $warnings = (Select-String -Pattern '^Warnings' -Path $file.FullName | Measure-Object).Count
-            $information = (Select-String -Pattern '^Information' -Path $file.FullName | Measure-Object).Count
-            $style = (Select-String -Pattern '^Style' -Path $file.FullName | Measure-Object).Count
-            $notes = (Select-String -Pattern '^Notes' -Path $file.FullName | Measure-Object).Count
+
+            $errors = (Select-String -Pattern 'Errors' -Path $file.FullName).Count
+            $warnings = (Select-String -Pattern 'Warnings' -Path $file.FullName).Count
+            $information = (Select-String -Pattern 'Information' -Path $file.FullName).Count
+            $style = (Select-String -Pattern 'Style' -Path $file.FullName).Count
+            $notes = (Select-String -Pattern 'Notes' -Path $file.FullName).Count
 
             Write-Host "Errors: $errors"
             Write-Host "Warnings: $warnings"
