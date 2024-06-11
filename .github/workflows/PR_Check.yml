@@ -1,101 +1,169 @@
-Count-MISRA-Messages:
-  runs-on: windows-latest
-  needs: PR-Check
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+name: PR-Check and Count MISRA Messages
 
-    - name: Count MISRA Messages and Compare
-      run: |
-        function Read-CountsFromFile {
-          param (
-            [string]$filePath
-          )
-          $content = Get-Content -Path $filePath
-          $errors = ($content -join "`n" | Select-String -Pattern 'Errors \((\d+)\)').Matches[0].Groups[1].Value
-          $warnings = ($content -join "`n" | Select-String -Pattern 'Warnings \((\d+)\)').Matches[0].Groups[1].Value
-          $information = ($content -join "`n" | Select-String -Pattern 'Information \((\d+)\)').Matches[0].Groups[1].Value
-          $style = ($content -join "`n" | Select-String -Pattern 'Style \((\d+)\)').Matches[0].Groups[1].Value
-          $notes = ($content -join "`n" | Select-String -Pattern 'Notes \((\d+)\)').Matches[0].Groups[1].Value
+on:
+  pull_request:
+    branches:
+      - 'develop'
+  workflow_dispatch:
 
-          return [PSCustomObject]@{
-            Errors = [int]$errors
-            Warnings = [int]$warnings
-            Information = [int]$information
-            Style = [int]$style
-            Notes = [int]$notes
+jobs:
+  PR-Check:
+    runs-on: self-hosted
+    steps:
+      - name: Support long file names
+        run: git config --global core.longpaths true
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run script with parameters
+        run: |
+          cd Code
+          echo "Reading parameters from file..."
+          Get-Content GithubRepos.txt | ForEach-Object {
+            Write-Host "Running script with parameter: $_"
+            py Interface.py $_
           }
-        }
+        shell: powershell
 
-        $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
-        foreach ($file in $files) {
-          Write-Host "Processing file: $file.FullName"
-
-          $oldFile = $file.FullName -replace '.txt$', '_old.txt'
-
-          if (Test-Path -Path $oldFile) {
-            $oldCounts = Read-CountsFromFile -filePath $oldFile
-          } else {
-            $oldCounts = [PSCustomObject]@{
-              Errors = 0
-              Warnings = 0
-              Information = 0
-              Style = 0
-              Notes = 0
-            }
+      - name: Search for Result files and save old versions
+        run: |
+          cd $env:GITHUB_WORKSPACE
+          $fileTypes = @("result.txt", "parsed_results.txt")
+          $destination = "$env:GITHUB_WORKSPACE/Code/Result"
+          
+          if (!(Test-Path -Path $destination)) {
+            New-Item -ItemType Directory -Path $destination
           }
-
-          $newCounts = Read-CountsFromFile -filePath $file.FullName
-
-          Write-Host "Old Counts: $oldCounts"
-          Write-Host "New Counts: $newCounts"
-
-          $increaseThreshold = 0.10
-          $initialThreshold = 10  # Allow an initial increase up to 10 for new counts
-
-          function Check-Increase {
-            param (
-              [int]$oldValue,
-              [int]$newValue,
-              [string]$type
-            )
-            if ($oldValue -eq 0) {
-              Write-Host "$type count has increased from $oldValue to $newValue."
-              if ($newValue -gt $initialThreshold) {
-                Write-Error "$type count increased significantly from 0 to $newValue"
-                exit 1
+          foreach ($fileType in $fileTypes) {
+            $files = Get-ChildItem -Path . -Filter $fileType -Recurse
+            if ($files) {
+              Write-Host "Found $fileType files:"
+              $files | ForEach-Object { Write-Host $_.FullName }
+              $files | ForEach-Object { 
+                $repoName = $_.FullName -replace '^.*Code\\([^\\]+)\\.*$', '$1'
+                $newFileName = "$($fileType -replace '\.txt$', "_$repoName.txt")"
+                $oldFileName = "$($fileType -replace '\.txt$', "_$repoName_old.txt")"
+                
+                if (Test-Path -Path "$destination\$newFileName") {
+                  if (Test-Path -Path "$destination\$oldFileName") {
+                    Remove-Item -Path "$destination\$oldFileName"
+                  }
+                  Move-Item -Path "$destination\$newFileName" -Destination "$destination\$oldFileName"
+                }
+                Copy-Item -Path $_.FullName -Destination "$destination\$newFileName" 
               }
+              Write-Host "Copied $fileType files to $destination"
             } else {
-              $increase = ($newValue - $oldValue) / $oldValue
-              Write-Host "$type count has increased by $increase% (Old=$oldValue, New=$newValue)."
-              if ($increase -gt $increaseThreshold) {
-                Write-Error "$type count increased by more than 10%: Old=$oldValue, New=$newValue"
-                exit 1
-              }
+              Write-Host "No $fileType files found"
+            }
+          }
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Action"
+          git add Code/Result
+          git commit -m "Add all result.txt and parsed_results.txt files including old versions"
+          git push 
+        shell: powershell
+  Count-MISRA-Messages:
+    runs-on: windows-latest
+    needs: PR-Check
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Count MISRA Messages and Compare
+        run: |
+          function Read-CountsFromFile {
+            param (
+              [string]$filePath
+            )
+            $content = Get-Content -Path $filePath
+            $errors = ($content -join "`n" | Select-String -Pattern 'Errors \((\d+)\)').Matches[0].Groups[1].Value
+            $warnings = ($content -join "`n" | Select-String -Pattern 'Warnings \((\d+)\)').Matches[0].Groups[1].Value
+            $information = ($content -join "`n" | Select-String -Pattern 'Information \((\d+)\)').Matches[0].Groups[1].Value
+            $style = ($content -join "`n" | Select-String -Pattern 'Style \((\d+)\)').Matches[0].Groups[1].Value
+            $notes = ($content -join "`n" | Select-String -Pattern 'Notes \((\d+)\)').Matches[0].Groups[1].Value
+
+            return [PSCustomObject]@{
+              Errors = [int]$errors
+              Warnings = [int]$warnings
+              Information = [int]$information
+              Style = [int]$style
+              Notes = [int]$notes
             }
           }
 
-          Check-Increase -oldValue $oldCounts.Errors -newValue $newCounts.Errors -type "Errors"
-          Check-Increase -oldValue $oldCounts.Warnings -newValue $newCounts.Warnings -type "Warnings"
-          Check-Increase -oldValue $oldCounts.Information -newValue $newCounts.Information -type "Information"
-          Check-Increase -oldValue $oldCounts.Style -newValue $newCounts.Style -type "Style"
-          Check-Increase -oldValue $oldCounts.Notes -newValue $newCounts.Notes -type "Notes"
+          $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
+          foreach ($file in $files) {
+            Write-Host "Processing file: $file.FullName"
 
-          echo "errors_$($file.Name)=$newCounts.Errors" >> $env:GITHUB_ENV
-          echo "warnings_$($file.Name)=$newCounts.Warnings" >> $env:GITHUB_ENV
-          echo "information_$($file.Name)=$newCounts.Information" >> $env:GITHUB_ENV
-          echo "style_$($file.Name)=$newCounts.Style" >> $env:GITHUB_ENV
-          echo "notes_$($file.Name)=$newCounts.Notes" >> $env:GITHUB_ENV
+            $oldFile = $file.FullName -replace '.txt$', '_old.txt'
 
-          if (Test-Path -Path $file.FullName) {
-            Move-Item -Path $file.FullName -Destination $oldFile
-            Copy-Item -Path $file.FullName -Destination $file.FullName -Force
+            if (Test-Path -Path $oldFile) {
+              $oldCounts = Read-CountsFromFile -filePath $oldFile
+            } else {
+              $oldCounts = [PSCustomObject]@{
+                Errors = 0
+                Warnings = 0
+                Information = 0
+                Style = 0
+                Notes = 0
+              }
+            }
+
+            $newCounts = Read-CountsFromFile -filePath $file.FullName
+
+            Write-Host "Old Counts: $oldCounts"
+            Write-Host "New Counts: $newCounts"
+
+            $increaseThreshold = 0.10
+            $initialThreshold = 10  # Allow an initial increase up to 10 for new counts
+
+            function Check-Increase {
+              param (
+                [int]$oldValue,
+                [int]$newValue,
+                [string]$type
+              )
+              if ($oldValue -eq 0) {
+                Write-Host "$type count has increased from $oldValue to $newValue."
+                if ($newValue -gt $initialThreshold) {
+                  Write-Error "$type count increased significantly from 0 to $newValue"
+                  exit 1
+                }
+              } else {
+                $increase = ($newValue - $oldValue) / $oldValue
+                Write-Host "$type count has increased by $increase% (Old=$oldValue, New=$newValue)."
+                if ($increase -gt $increaseThreshold) {
+                  Write-Error "$type count increased by more than 10%: Old=$oldValue, New=$newValue"
+                  exit 1
+                }
+              }
+            }
+
+            Check-Increase -oldValue $oldCounts.Errors -newValue $newCounts.Errors -type "Errors"
+            Check-Increase -oldValue $oldCounts.Warnings -newValue $newCounts.Warnings -type "Warnings"
+            Check-Increase -oldValue $oldCounts.Information -newValue $newCounts.Information -type "Information"
+            Check-Increase -oldValue $oldCounts.Style -newValue $newCounts.Style -type "Style"
+            Check-Increase -oldValue $oldCounts.Notes -newValue $newCounts.Notes -type "Notes"
+
+            echo "errors_$($file.Name)=$newCounts.Errors" >> $env:GITHUB_ENV
+            echo "warnings_$($file.Name)=$newCounts.Warnings" >> $env:GITHUB_ENV
+            echo "information_$($file.Name)=$newCounts.Information" >> $env:GITHUB_ENV
+            echo "style_$($file.Name)=$newCounts.Style" >> $env:GITHUB_ENV
+            echo "notes_$($file.Name)=$newCounts.Notes" >> $env:GITHUB_ENV
+
+            if (Test-Path -Path $file.FullName) {
+              Move-Item -Path $file.FullName -Destination $oldFile
+              Copy-Item -Path $file.FullName -Destination $file.FullName -Force
+            }
           }
-        }
 
-        git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Action"
-        git add Code/Result
-        git commit -m "Update MISRA counts after comparison"
-        git push 
-      shell: powershell
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Action"
+          git add Code/Result
+          git commit -m "Update MISRA counts after comparison"
+          git push 
+        shell: powershell
+
+        
