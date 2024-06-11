@@ -48,6 +48,28 @@ jobs:
           } else {
             Write-Host "No result.txt files found"
           }
+
+          $files = Get-ChildItem -Path . -Filter "parsed_results.txt" -Recurse
+          if ($files) {
+            Write-Host "Found result.txt files:"
+            $files | ForEach-Object { Write-Host $_.FullName }
+
+            $destination = "$env:GITHUB_WORKSPACE/Code/Result"
+            if (!(Test-Path -Path $destination)) {
+              New-Item -ItemType Directory -Path $destination
+            }
+
+            $files | ForEach-Object { 
+              $repoName = $_.FullName -replace '^.*Code\\([^\\]+)\\.*$', '$1'
+              $newFileName = "parsed_results_$repoName.txt"
+              Copy-Item -Path $_.FullName -Destination "$destination\$newFileName" 
+            }
+            Write-Host "Copied parsed_results.txt files to $destination"
+          } else {
+            Write-Host "No parsed_results.txt files found"
+          }
+
+          
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Action"
           git add Code/Result
