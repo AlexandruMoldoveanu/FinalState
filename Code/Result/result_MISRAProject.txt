@@ -1,0 +1,104 @@
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\BLMGR.c:0:0: information: Limiting analysis of branches. Use --check-level=exhaustive to analyze all branches. [normalCheckLevelMaxBranches]
+
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\BLMGR.c:1229:14: style: Variable 'RecvdCrc' is assigned a value that is never used. [unreadVariable]
+    RecvdCrc = BLMGR_DataRxBuffer[FRAME_CRC_IDX];
+             ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\BLMGR.c:1230:14: style: Variable 'RecvdCrc' is assigned a value that is never used. [unreadVariable]
+    RecvdCrc |= (u16)((u16)((u16)BLMGR_DataRxBuffer[FRAME_CRC_IDX + 1U]) << 8U);
+             ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\BLTD.c:33:5: style: The scope of the variable 'IsEqual' can be reduced. [variableScope]
+ u8 IsEqual;
+    ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\BLTD.c:73:5: style: The scope of the variable 'i' can be reduced. [variableScope]
+ u8 i;
+    ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\CRC.c:0:0: information: Limiting analysis of branches. Use --check-level=exhaustive to analyze all branches. [normalCheckLevelMaxBranches]
+
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\CRC.c:46:6: style: The scope of the variable 'bits_read' can be reduced. [variableScope]
+ u16 bits_read = 0U, bit_flag;
+     ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\CRC.c:46:22: style: The scope of the variable 'bit_flag' can be reduced. [variableScope]
+ u16 bits_read = 0U, bit_flag;
+                     ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\CRC.c:47:6: style: The scope of the variable 'i' can be reduced. [variableScope]
+ u16 i;
+     ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\CRC.c:49:6: style: The scope of the variable 'j' can be reduced. [variableScope]
+ u16 j = 0x0001U;
+     ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\CRC.c:50:5: style: The scope of the variable 'res' can be reduced. [variableScope]
+ u8 res;
+    ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\KEYPAD.c:43:19: style: The scope of the variable 'temp2' can be reduced. [variableScope]
+    unsigned char temp2;
+                  ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\KEYPAD.c:29:18: warning: Uninitialized variable: *(VALPTR) [uninitvar]
+    *(VALPTR) = (*(VALPTR)) >> KPD_COL_PIN_NUM;
+                 ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\KEYPAD.c:55:49: note: Calling function 'DIO_vidReadPortData', 3rd argument '&ColData' value is <Uninit>
+  DIO_vidReadPortData(KPD_COL_PORT,KPD_COL_MASK,&ColData);
+                                                ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\KEYPAD.c:29:18: note: Uninitialized variable: *(VALPTR)
+    *(VALPTR) = (*(VALPTR)) >> KPD_COL_PIN_NUM;
+                 ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:443:24: style: Variable 'u8RegData1' is reassigned a value before the old one has been used. [redundantAssignment]
+            u8RegData1 = SPI_u8TransfereByte(0x00U);
+                       ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:429:24: note: u8RegData1 is assigned
+            u8RegData1 = SPI_u8TransfereByte(0x00U);
+                       ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:443:24: note: u8RegData1 is overwritten
+            u8RegData1 = SPI_u8TransfereByte(0x00U);
+                       ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:644:16: style: Variable 'u8RegData8' is reassigned a value before the old one has been used. [redundantAssignment]
+    u8RegData8 = SPI_u8TransfereByte(0x00U);
+               ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:639:16: note: u8RegData8 is assigned
+    u8RegData8 = SPI_u8TransfereByte(0x00U);
+               ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:644:16: note: u8RegData8 is overwritten
+    u8RegData8 = SPI_u8TransfereByte(0x00U);
+               ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:174:4: style: Redundant pointer operation on 'GYHD_u8TimeOutFlag' - it's already a variable. [redundantPointerOp]
+   *(&GYHD_u8TimeOutFlag) = 0x01U;
+   ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:599:2: style: Redundant pointer operation on 'u8TimeOutFlag' - it's already a variable. [redundantPointerOp]
+ *(&u8TimeOutFlag) = 0x01U;
+ ^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\BLMGR.c:194:0: style: The function 'BLMGR_Test' is never used. [unusedFunction]
+void BLMGR_Test(void)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\BLMGR.c:903:0: style: The function 'BLMGR_SetDeviceName' is never used. [unusedFunction]
+void BLMGR_SetDeviceName(u8 const DeviceName[],u16 DeviceNameLength)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\KEYPAD.c:32:0: style: The function 'KPD_Init' is never used. [unusedFunction]
+void KPD_Init(void)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\KEYPAD.c:40:0: style: The function 'KPD_ReadVal' is never used. [unusedFunction]
+void KPD_ReadVal(unsigned char* ValuePtr)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:158:0: style: The function 'GYHD_Init' is never used. [unusedFunction]
+u8 GYHD_Init(void)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:200:0: style: The function 'GYHD_WakeUpModule' is never used. [unusedFunction]
+void GYHD_WakeUpModule(u8* u8WakeUpStatePtr)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:214:0: style: The function 'GYHD_SleepModule' is never used. [unusedFunction]
+void GYHD_SleepModule(void)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:219:0: style: The function 'GYHD_ReadXDirection' is never used. [unusedFunction]
+u8 GYHD_ReadXDirection(u16* pu16Data,u8* pu8ReadingStatus)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:250:0: style: The function 'GYHD_ReadYDirection' is never used. [unusedFunction]
+u8 GYHD_ReadYDirection(u16* pu16Data,u8* pu8ReadingStatus)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:281:0: style: The function 'GYHD_ReadZDirection' is never used. [unusedFunction]
+u8 GYHD_ReadZDirection(u16* pu16Data,u8* pu8ReadingStatus)
+^
+F:\actions-runner\_work\FinalState\FinalState\Code\MISRAProject\L3G4200D.c:660:0: style: The function 'vidInitSelectiveAxisMovement' is never used. [unusedFunction]
+static void vidInitSelectiveAxisMovement(void)
+^
+nofile:0:0: information: Active checkers: 114/802 (use --checkers-report=<filename> to see details) [checkersReport]
+
