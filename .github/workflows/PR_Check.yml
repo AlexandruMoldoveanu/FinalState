@@ -71,17 +71,17 @@ jobs:
         run: |
           $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
           foreach ($file in $files) {
-            Write-Host "Processing file: $file"
+            Write-Host "Processing file: $file.FullName"
 
             # Read the entire file content
             $content = Get-Content -Path $file.FullName
 
-            # Count occurrences using exact matches
-            $errors = ($content | Select-String -Pattern '^\s*Errors\s*$').Count
-            $warnings = ($content | Select-String -Pattern '^\s*Warnings\s*$').Count
-            $information = ($content | Select-String -Pattern '^\s*Information\s*$').Count
-            $style = ($content | Select-String -Pattern '^\s*Style\s*$').Count
-            $notes = ($content | Select-String -Pattern '^\s*Notes\s*$').Count
+            # Extract counts by matching specific sections
+            $errors = ($content -join "`n" | Select-String -Pattern 'Errors \(\d+\)').Matches.Count
+            $warnings = ($content -join "`n" | Select-String -Pattern 'Warnings \(\d+\)').Matches.Count
+            $information = ($content -join "`n" | Select-String -Pattern 'Information \(\d+\)').Matches.Count
+            $style = ($content -join "`n" | Select-String -Pattern 'Style \(\d+\)').Matches.Count
+            $notes = ($content -join "`n" | Select-String -Pattern 'Notes \(\d+\)').Matches.Count
 
             Write-Host "Errors: $errors"
             Write-Host "Warnings: $warnings"
