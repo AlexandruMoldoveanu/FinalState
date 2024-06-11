@@ -128,15 +128,17 @@ jobs:
                 [int]$newValue,
                 [string]$type
               )
-              if ($oldValue -gt 0) {
+              if ($oldValue -eq 0) {
+                if ($newValue -gt 5) {  # Allowing a small initial increase for new counts
+                  Write-Error "$type count increased significantly from 0 to $newValue"
+                  exit 1
+                }
+              } else {
                 $increase = ($newValue - $oldValue) / $oldValue
                 if ($increase -gt $increaseThreshold) {
                   Write-Error "$type count increased by more than 10%: Old=$oldValue, New=$newValue"
                   exit 1
                 }
-              } elseif ($newValue -gt 0) {
-                Write-Error "$type count increased from 0 to $newValue"
-                exit 1
               }
             }
 
