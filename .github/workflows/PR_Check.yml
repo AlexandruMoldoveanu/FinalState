@@ -72,16 +72,32 @@ jobs:
           $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
           foreach ($file in $files) {
             Write-Host "Processing file: $file.FullName"
+            
+            # Initialize counters
+            $errors = 0
+            $warnings = 0
+            $information = 0
+            $style = 0
+            $notes = 0
+            $section = ""
 
-            # Read the entire file content
-            $content = Get-Content -Path $file.FullName
-
-            # Extract counts by matching specific sections
-            $errors = ($content -join "`n" | Select-String -Pattern 'Errors \(\d+\)').Matches.Count
-            $warnings = ($content -join "`n" | Select-String -Pattern 'Warnings \(\d+\)').Matches.Count
-            $information = ($content -join "`n" | Select-String -Pattern 'Information \(\d+\)').Matches.Count
-            $style = ($content -join "`n" | Select-String -Pattern 'Style \(\d+\)').Matches.Count
-            $notes = ($content -join "`n" | Select-String -Pattern 'Notes \(\d+\)').Matches.Count
+            # Read and process file line by line
+            Get-Content -Path $file.FullName | ForEach-Object {
+              if ($_ -match 'Errors \(\d+\):') { $section = "errors" }
+              elseif ($_ -match 'Warnings \(\d+\):') { $section = "warnings" }
+              elseif ($_ -match 'Information \(\d+\):') { $section = "information" }
+              elseif ($_ -match 'Style \(\d+\):') { $section = "style" }
+              elseif ($_ -match 'Notes \(\d+\):') { $section = "notes" }
+              elseif ($section -ne "" -and $_ -ne "") {
+                switch ($section) {
+                  "errors" { $errors++ }
+                  "warnings" { $warnings++ }
+                  "information" { $information++ }
+                  "style" { $style++ }
+                  "notes" { $notes++ }
+                }
+              }
+            }
 
             Write-Host "Errors: $errors"
             Write-Host "Warnings: $warnings"
