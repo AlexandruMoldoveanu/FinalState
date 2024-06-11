@@ -130,12 +130,14 @@ jobs:
                 [string]$type
               )
               if ($oldValue -eq 0) {
+                Write-Host "$type count has increased from $oldValue to $newValue."
                 if ($newValue -gt $initialThreshold) {
                   Write-Error "$type count increased significantly from 0 to $newValue"
                   exit 1
                 }
               } else {
                 $increase = ($newValue - $oldValue) / $oldValue
+                Write-Host "$type count has increased by $increase% (Old=$oldValue, New=$newValue)."
                 if ($increase -gt $increaseThreshold) {
                   Write-Error "$type count increased by more than 10%: Old=$oldValue, New=$newValue"
                   exit 1
@@ -162,4 +164,5 @@ jobs:
           git commit -m "Update MISRA counts after comparison"
           git push 
         shell: powershell
+
 
