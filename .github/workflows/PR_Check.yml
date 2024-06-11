@@ -48,6 +48,9 @@ jobs:
                 $oldFileName = "$($fileType -replace '\.txt$', "_$repoName_old.txt")"
                 
                 if (Test-Path -Path "$destination\$newFileName") {
+                  if (Test-Path -Path "$destination\$oldFileName") {
+                    Remove-Item -Path "$destination\$oldFileName"
+                  }
                   Move-Item -Path "$destination\$newFileName" -Destination "$destination\$oldFileName"
                 }
 
