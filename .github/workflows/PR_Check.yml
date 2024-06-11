@@ -73,11 +73,15 @@ jobs:
           foreach ($file in $files) {
             Write-Host "Processing file: $file"
 
-            $errors = (Select-String -Pattern 'Errors' -Path $file.FullName).Count
-            $warnings = (Select-String -Pattern 'Warnings' -Path $file.FullName).Count
-            $information = (Select-String -Pattern 'Information' -Path $file.FullName).Count
-            $style = (Select-String -Pattern 'Style' -Path $file.FullName).Count
-            $notes = (Select-String -Pattern 'Notes' -Path $file.FullName).Count
+            # Read the entire file content
+            $content = Get-Content -Path $file.FullName
+
+            # Count occurrences using exact matches
+            $errors = ($content | Select-String -Pattern '^\s*Errors\s*$').Count
+            $warnings = ($content | Select-String -Pattern '^\s*Warnings\s*$').Count
+            $information = ($content | Select-String -Pattern '^\s*Information\s*$').Count
+            $style = ($content | Select-String -Pattern '^\s*Style\s*$').Count
+            $notes = ($content | Select-String -Pattern '^\s*Notes\s*$').Count
 
             Write-Host "Errors: $errors"
             Write-Host "Warnings: $warnings"
