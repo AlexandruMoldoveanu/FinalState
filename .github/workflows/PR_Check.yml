@@ -72,11 +72,11 @@ jobs:
           $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
           foreach ($file in $files) {
             Write-Host "Processing file: $file"
-            $errors = (Select-String -Pattern '^Errors' -Path $file.FullName).Count
-            $warnings = (Select-String -Pattern '^Warnings' -Path $file.FullName).Count
-            $information = (Select-String -Pattern '^Information' -Path $file.FullName).Count
-            $style = (Select-String -Pattern '^Style' -Path $file.FullName).Count
-            $notes = (Select-String -Pattern '^Notes' -Path $file.FullName).Count
+            $errors = (Select-String -Pattern '^Errors' -Path $file.FullName | Measure-Object).Count
+            $warnings = (Select-String -Pattern '^Warnings' -Path $file.FullName | Measure-Object).Count
+            $information = (Select-String -Pattern '^Information' -Path $file.FullName | Measure-Object).Count
+            $style = (Select-String -Pattern '^Style' -Path $file.FullName | Measure-Object).Count
+            $notes = (Select-String -Pattern '^Notes' -Path $file.FullName | Measure-Object).Count
 
             Write-Host "File: $file.FullName"
             Write-Host "Errors: $errors"
@@ -85,10 +85,10 @@ jobs:
             Write-Host "Style: $style"
             Write-Host "Notes: $notes"
 
-            echo "::set-output name=errors_$($file.Name)::$errors"
-            echo "::set-output name=warnings_$($file.Name)::$warnings"
-            echo "::set-output name=information_$($file.Name)::$information"
-            echo "::set-output name=style_$($file.Name)::$style"
-            echo "::set-output name=notes_$($file.Name)::$notes"
+            echo "errors_$($file.Name)=$errors" >> $env:GITHUB_ENV
+            echo "warnings_$($file.Name)=$warnings" >> $env:GITHUB_ENV
+            echo "information_$($file.Name)=$information" >> $env:GITHUB_ENV
+            echo "style_$($file.Name)=$style" >> $env:GITHUB_ENV
+            echo "notes_$($file.Name)=$notes" >> $env:GITHUB_ENV
           }
         shell: powershell
