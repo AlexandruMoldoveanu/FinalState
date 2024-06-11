@@ -162,3 +162,4 @@ jobs:
           git commit -m "Update MISRA counts after comparison"
           git push 
         shell: powershell
+
