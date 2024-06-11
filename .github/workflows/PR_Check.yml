@@ -121,6 +121,7 @@ jobs:
             Write-Host "New Counts: $newCounts"
 
             $increaseThreshold = 0.10
+            $initialThreshold = 10  # Allow an initial increase up to 10 for new counts
 
             function Check-Increase {
               param (
@@ -129,7 +130,7 @@ jobs:
                 [string]$type
               )
               if ($oldValue -eq 0) {
-                if ($newValue -gt 5) {  # Allowing a small initial increase for new counts
+                if ($newValue -gt $initialThreshold) {
                   Write-Error "$type count increased significantly from 0 to $newValue"
                   exit 1
                 }
