@@ -75,9 +75,13 @@ def generate_report():
     ]
     
     output_file = project_path + '\\result.txt'
+    output_file_parsed = project_path + '\\parsed_results.txt'
     
     with open(output_file, 'w') as file:
         subprocess.run(cppcheck_cmd, stderr=file)
+        
+    with open(output_file_parsed, 'w') as file:
+        subprocess.run(['python', 'Parser.py', project_name ,'n'])
 
 def print_results():
     choice = input("Do you wanna see the result? Please respons with 'y' or 'n'. ")

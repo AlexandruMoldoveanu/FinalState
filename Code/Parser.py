@@ -34,6 +34,11 @@ def print_file_contents(file_path):
         contents = file.read()
         print(contents)
 
+def return_errors(errors, warnings)
+    if format(len(errors) > 100
+        return 0
+    
+    
 if __name__ == "__main__":
     input_file_path = project_name + '\\result.txt'
     output_file_path = project_name + '\\parsed_results.txt'
