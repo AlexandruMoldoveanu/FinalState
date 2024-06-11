@@ -1,2 +1,1 @@
-https://github.com/langroodi/Adaptive-AUTOSAR.git
-https://github.com/AlexandruMoldoveanu/FinalState.git
+https://github.com/xiongyu0523/MISRAC2004TestProject.git
