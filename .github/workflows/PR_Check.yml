@@ -99,10 +99,19 @@ jobs:
 
           $oldFile = $file.FullName -replace '.txt$', '_old.txt'
 
+          if (Test-Path -Path $file.FullName) {
+            if (Test-Path -Path $oldFile) {
+              Write-Host "Old file already exists: $oldFile"
+            } else {
+              Copy-Item -Path $file.FullName -Destination $oldFile -Force
+              Write-Host "Created old file by copying: $file.FullName to $oldFile"
+            }
+          }
+
+          $newCounts = Read-CountsFromFile -filePath $file.FullName
+
           if (Test-Path -Path $oldFile) {
             $oldCounts = Read-CountsFromFile -filePath $oldFile
-
-            $newCounts = Read-CountsFromFile -filePath $file.FullName
 
             Write-Host "Old Counts: $oldCounts"
             Write-Host "New Counts: $newCounts"
@@ -137,11 +146,7 @@ jobs:
             Check-Increase -oldValue $oldCounts.Information -newValue $newCounts.Information -type "Information"
             Check-Increase -oldValue $oldCounts.Style -newValue $newCounts.Style -type "Style"
             Check-Increase -oldValue $oldCounts.Notes -newValue $newCounts.Notes -type "Notes"
-
-            # Move the new file to old file after comparison
-            Move-Item -Path $file.FullName -Destination $oldFile -Force
           } else {
-            $newCounts = Read-CountsFromFile -filePath $file.FullName
             Write-Host "No old file found, skipping comparison."
           }
 
@@ -158,3 +163,4 @@ jobs:
         git commit -m "Update MISRA counts after comparison"
         git push 
       shell: powershell
+
