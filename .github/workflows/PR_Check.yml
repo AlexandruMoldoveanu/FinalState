@@ -69,7 +69,7 @@ jobs:
 
       - name: Count MISRA Messages
         run: |
-          $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_*.txt"
+          $files = Get-ChildItem -Path "$env:GITHUB_WORKSPACE/Code/Result" -Filter "parsed_results_.txt"
           foreach ($file in $files) {
             Write-Host "Processing file: $file"
             $errors = (Select-String -Pattern '^Errors' -Path $file.FullName | Measure-Object).Count
@@ -78,7 +78,6 @@ jobs:
             $style = (Select-String -Pattern '^Style' -Path $file.FullName | Measure-Object).Count
             $notes = (Select-String -Pattern '^Notes' -Path $file.FullName | Measure-Object).Count
 
-            Write-Host "File: $file.FullName"
             Write-Host "Errors: $errors"
             Write-Host "Warnings: $warnings"
             Write-Host "Information: $information"
