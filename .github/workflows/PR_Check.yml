@@ -103,17 +103,6 @@ jobs:
             Write-Host "Processing file: $file.FullName"
 
             $oldFile = $file.FullName -replace '.txt$', '_old.txt'
-            if (Test-Path -Path $oldFile) {
-              $oldCounts = Read-CountsFromFile -filePath $oldFile
-            } else {
-              $oldCounts = [PSCustomObject]@{
-                Errors = 0
-                Warnings = 0
-                Information = 0
-                Style = 0
-                Notes = 0
-              }
-            }
 
             $newCounts = Read-CountsFromFile -filePath $file.FullName
 
@@ -144,12 +133,23 @@ jobs:
                 }
               }
             }
-
-            Check-Increase -oldValue $oldCounts.Errors -newValue $newCounts.Errors -type "Errors"
-            Check-Increase -oldValue $oldCounts.Warnings -newValue $newCounts.Warnings -type "Warnings"
-            Check-Increase -oldValue $oldCounts.Information -newValue $newCounts.Information -type "Information"
-            Check-Increase -oldValue $oldCounts.Style -newValue $newCounts.Style -type "Style"
-            Check-Increase -oldValue $oldCounts.Notes -newValue $newCounts.Notes -type "Notes"
+            
+            if (Test-Path -Path $oldFile) {
+              $oldCounts = Read-CountsFromFile -filePath $oldFile
+              Check-Increase -oldValue $oldCounts.Errors -newValue $newCounts.Errors -type "Errors"
+              Check-Increase -oldValue $oldCounts.Warnings -newValue $newCounts.Warnings -type "Warnings"
+              Check-Increase -oldValue $oldCounts.Information -newValue $newCounts.Information -type "Information"
+              Check-Increase -oldValue $oldCounts.Style -newValue $newCounts.Style -type "Style"
+              Check-Increase -oldValue $oldCounts.Notes -newValue $newCounts.Notes -type "Notes"
+            } else {
+              $oldCounts = [PSCustomObject]@{
+                Errors = 0
+                Warnings = 0
+                Information = 0
+                Style = 0
+                Notes = 0
+              }
+            }
 
             echo "errors_$($file.Name)=$newCounts.Errors" >> $env:GITHUB_ENV
             echo "warnings_$($file.Name)=$newCounts.Warnings" >> $env:GITHUB_ENV
