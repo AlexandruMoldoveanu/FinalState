@@ -65,7 +65,7 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Action"
           git add Code/Result
-          git commit -m "Add all result.txt and parsed_results.txt files"
+          git commit -m "Add all result.txt and parsed_results.txt files including old versions"
           git push 
         shell: powershell
 
@@ -152,4 +152,10 @@ jobs:
             echo "style_$($file.Name)=$newCounts.Style" >> $env:GITHUB_ENV
             echo "notes_$($file.Name)=$newCounts.Notes" >> $env:GITHUB_ENV
           }
+
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Action"
+          git add Code/Result
+          git commit -m "Update MISRA counts after comparison"
+          git push 
         shell: powershell
