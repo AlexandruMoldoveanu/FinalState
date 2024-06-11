@@ -67,7 +67,7 @@ jobs:
   Count-MISRA-Messages:
     runs-on: windows-latest
     needs: PR-Check
-      steps:
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
