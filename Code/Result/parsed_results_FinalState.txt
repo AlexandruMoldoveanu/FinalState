@@ -1,0 +1,12 @@
+Errors (0):
+
+Warnings (0):
+
+Information (3):
+F:\actions-runner\_work\FinalState\FinalState\Code\FinalState\Code\Main.c:1:0: information: Include file: <stdio.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+F:\actions-runner\_work\FinalState\FinalState\Code\FinalState\Code\Main.c:2:0: information: Include file: <stdlib.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+nofile:0:0: information: Active checkers: 114/802 (use --checkers-report=<filename> to see details) [checkersReport]
+
+Style (0):
+
+Notes (0):
