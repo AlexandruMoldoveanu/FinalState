@@ -1,6 +1,7 @@
 import re
 import sys
 import os
+import subprocess
 
 project_name = sys.argv[1]
 check = sys.argv[2]
@@ -121,3 +122,5 @@ if __name__ == "__main__":
         new_counts = get_counts(output_file_path)
         old_counts = get_counts(old_file_path)
         compare_results(new_counts, old_counts)
+
+    subprocess.run(['python', 'Influx.py'])
