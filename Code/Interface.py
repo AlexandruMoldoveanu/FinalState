@@ -49,17 +49,22 @@ def link_for_clone(link):
     global project_path
     global project_name
     project_path = os.getcwd()
-    match = re.search(r'/([^/]+)\.git$', link)
+    match = re.search(r'^https://github\.com/[^/]+/[^/]+\.git$', link)
     if match:
-        project_name = match.group(1)
-        project_path = project_path + '\\' + project_name
-        if os.path.exists(project_path):
-            try:
-                shutil.rmtree(project_path, onerror=remove_readonly)
-                print(f"Deleted directory: {project_path}")
-            except PermissionError as e:
-                print(f"PermissionError: {e}")
-        subprocess.run(['git', 'clone', link], check=True)
+        project_name_match = re.search(r'/([^/]+)\.git$', link)
+        if project_name_match:
+            project_name = project_name_match.group(1)
+            project_path = os.path.join(project_path, project_name)
+            if os.path.exists(project_path):
+                try:
+                    shutil.rmtree(project_path, onerror=remove_readonly)
+                    print(f"Deleted directory: {project_path}")
+                except PermissionError as e:
+                    print(f"PermissionError: {e}")
+            subprocess.run(['git', 'clone', link], check=True)
+        else:
+            print("Failed to extract project name from link")
+            sys.exit(1)
     else:
         print("Your repo link was wrong")
         sys.exit(0)
