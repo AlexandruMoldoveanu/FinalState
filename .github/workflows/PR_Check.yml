@@ -71,6 +71,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Delete old files
+      run: |
+        $pattern = "$env:GITHUB_WORKSPACE\\Code\\Result\\*_old.txt"
+        $files = Get-ChildItem -Path $pattern
+        foreach ($file in $files) {
+          Remove-Item -Path $file.FullName -Force
+        }
+      shell: powershell
+      
     - name: Count MISRA Messages and Compare
       run: |
         function Read-CountsFromFile {
