@@ -5,7 +5,8 @@ on:
     branches:
       - 'develop'
   workflow_dispatch:
-
+permissions:
+  contents: write
 jobs:
   PR-Check:
     runs-on: self-hosted
@@ -62,11 +63,11 @@ jobs:
           }
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Action"
-          echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
-          git checkout ${{ env.BRANCH_NAME }}
+          # echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          # git checkout ${{ env.BRANCH_NAME }}
           git add Code/Result
           git commit -m "Add all result.txt and parsed_results.txt files including old versions"
-          git push origin ${{ env.BRANCH_NAME }}
+          git push
         shell: powershell
   Count-MISRA-Messages:
     runs-on: windows-latest
