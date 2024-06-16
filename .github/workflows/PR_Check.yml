@@ -175,6 +175,6 @@ jobs:
         git config --global user.name "GitHub Action"
         git add Code/Result
         git commit -m "Update MISRA counts after comparison"
-        git push origin HEAD:develop
+        git push
       shell: powershell
 
