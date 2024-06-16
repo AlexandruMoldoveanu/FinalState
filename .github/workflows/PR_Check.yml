@@ -66,7 +66,7 @@ jobs:
           git checkout ${{ env.BRANCH_NAME }}
           git add Code/Result
           git commit -m "Add all result.txt and parsed_results.txt files including old versions"
-          git push origin HEAD:${{ env.BRANCH_NAME }}
+          git push origin ${{ env.BRANCH_NAME }}
         shell: powershell
   Count-MISRA-Messages:
     runs-on: windows-latest
