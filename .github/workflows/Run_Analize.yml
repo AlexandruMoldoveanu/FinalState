@@ -72,6 +72,8 @@ jobs:
     runs-on: self-hosted
     needs: Create-Results
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
     - name: Delete old files
       run: |
         $pattern = "$env:GITHUB_WORKSPACE\\Code\\Result\\*_old.txt"
