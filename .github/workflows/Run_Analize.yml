@@ -1,4 +1,4 @@
-name: PR-Check and Count MISRA Messages
+name: Create-Results and Count MISRA Messages
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
 jobs:
-  PR-Check:
+  Create-Results:
     runs-on: self-hosted
     steps:
       - name: Support long file names
@@ -71,7 +71,7 @@ jobs:
         shell: powershell
   Count-MISRA-Messages:
     runs-on: windows-latest
-    needs: PR-Check
+    needs: Create-Results
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
