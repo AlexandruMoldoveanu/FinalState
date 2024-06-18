@@ -4,6 +4,7 @@ import re
 import os
 import shutil
 import argparse
+import glob
 
 project_path = ''
 project_name = ''
@@ -70,13 +71,32 @@ def link_for_clone(link):
         sys.exit(0)
     print(f"You entered: {link}")
 
+def delete_old_files(directory):
+    old_files = glob.glob(os.path.join(directory, '*_old.txt'))
+    for file in old_files:
+        try:
+            os.remove(file)
+            print(f"Deleted file: {file}")
+        except OSError as e:
+            print(f"Error deleting file {file}: {e}")
+            
 def rename_old_reports():
     old_result = os.path.join(project_path, 'result.txt')
     old_parsed_result = os.path.join(project_path, 'parsed_results.txt')
+    delete_old_files(project_path)
     if os.path.exists(old_result):
-        shutil.move(old_result, old_result.replace('.txt', '_old.txt'))
+        new_result_name = old_result.replace('.txt', '_old.txt')
+        if os.path.exists(new_result_name):
+            os.remove(new_result_name)
+        shutil.move(old_result, new_result_name)
+        print(f"Renamed {old_result} to {new_result_name}")
+        
     if os.path.exists(old_parsed_result):
-        shutil.move(old_parsed_result, old_parsed_result.replace('.txt', '_old.txt'))
+        new_parsed_result_name = old_parsed_result.replace('.txt', '_old.txt')
+        if os.path.exists(new_parsed_result_name):
+            os.remove(new_parsed_result_name)
+        shutil.move(old_parsed_result, new_parsed_result_name)
+        print(f"Renamed {old_parsed_result} to {new_parsed_result_name}")
 
 def generate_report():
     rename_old_reports()
@@ -102,8 +122,12 @@ def print_results():
     choice = input("Do you wanna see the result? Please respond with 'y' or 'n'. ")
     if choice == 'y':
         subprocess.run(['python', 'Parser.py', project_name, 'y'])
+    else
     if choice == 'n':
         subprocess.run(['python', 'Parser.py', project_name, 'n'])
+    else
+        print("Invalid choice, please choose again.")
+        print_results()
 
 def open_test_report():
     choice = input("Please provide name of repo: ")

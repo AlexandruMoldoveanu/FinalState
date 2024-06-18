@@ -123,4 +123,4 @@ if __name__ == "__main__":
         old_counts = get_counts(old_file_path)
         compare_results(new_counts, old_counts)
 
-    subprocess.run(['python', 'Influx.py'])
+    # subprocess.run(['python', 'Influx.py'])
