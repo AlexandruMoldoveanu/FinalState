@@ -1,14 +1,13 @@
-name: PR-Check and Count MISRA Messages
+name: Create-Results and Count MISRA Messages
 
 on:
-  pull_request:
-    branches:
-      - 'develop'
+  schedule:
+    - cron: "0 22 * * *"
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
-  PR-Check:
+  Create-Results:
     runs-on: self-hosted
     steps:
       - name: Support long file names
@@ -70,12 +69,11 @@ jobs:
           git push
         shell: powershell
   Count-MISRA-Messages:
-    runs-on: windows-latest
-    needs: PR-Check
+    runs-on: self-hosted
+    needs: Create-Results
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
     - name: Delete old files
       run: |
         $pattern = "$env:GITHUB_WORKSPACE\\Code\\Result\\*_old.txt"
