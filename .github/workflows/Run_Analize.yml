@@ -31,46 +31,15 @@ jobs:
           }
         shell: powershell
 
-      - name: Search for Result files and save old versions
+      - name: Commit and push changes
         run: |
-          cd $env:GITHUB_WORKSPACE
-          $fileTypes = @("result.txt", "parsed_results.txt")
-          $destination = "$env:GITHUB_WORKSPACE/Code/Result"
-          
-          if (!(Test-Path -Path $destination)) {
-            New-Item -ItemType Directory -Path $destination
-          }
-          foreach ($fileType in $fileTypes) {
-            $files = Get-ChildItem -Path . -Filter $fileType -Recurse
-            if ($files) {
-              Write-Host "Found $fileType files:"
-              $files | ForEach-Object { Write-Host $_.FullName }
-              $files | ForEach-Object { 
-                $repoName = $_.FullName -replace '^.*Code\\([^\\]+)\\.*$', '$1'
-                $newFileName = "$($fileType -replace '\.txt$', "_$repoName.txt")"
-                $oldFileName = "$($fileType -replace '\.txt$', "_$repoName_old.txt")"
-                
-                if (Test-Path -Path "$destination\$newFileName") {
-                  if (Test-Path -Path "$destination\$oldFileName") {
-                    Remove-Item -Path "$destination\$oldFileName"
-                  }
-                  Move-Item -Path "$destination\$newFileName" -Destination "$destination\$oldFileName"
-                }
-                Copy-Item -Path $_.FullName -Destination "$destination\$newFileName" 
-              }
-              Write-Host "Copied $fileType files to $destination"
-            } else {
-              Write-Host "No $fileType files found"
-            }
-          }
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Action"
-          # echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
-          # git checkout ${{ env.BRANCH_NAME }}
           git add Code/Result
           git commit -m "Add all result.txt and parsed_results.txt files including old versions"
           git push
         shell: powershell
+        
   Count-MISRA-Messages:
     runs-on: self-hosted
     needs: Create-Results
