@@ -1,3 +1,5 @@
+"""This module provides functions to clone repositories, generate reports, and manage project files."""
+
 import sys
 import subprocess
 import re
@@ -6,10 +8,11 @@ import shutil
 import argparse
 import glob
 
-project_path = ''
-project_name = ''
+PROJECT_PATH = ''
+PROJECT_NAME = ''
 
 def menu():
+    """Displays the main menu and handles user choices."""
     parser = argparse.ArgumentParser(description='Process some parameters.')
     parser.add_argument('param1', nargs='?', help='First parameter')
     args = parser.parse_args()
@@ -42,24 +45,26 @@ def menu():
             else:
                 print("Invalid choice, please choose again.")
 
-def remove_readonly(func, path, excinfo):
+def remove_readonly(func, path, _excinfo):
+    """Removes readonly attribute from files."""
     os.chmod(path, 0o777)
     func(path)
 
 def link_for_clone(link):
-    global project_path
-    global project_name
-    project_path = os.getcwd()
+    """Clones the repository from the given link."""
+    global PROJECT_PATH
+    global PROJECT_NAME
+    PROJECT_PATH = os.getcwd()
     match = re.search(r'^https://github\.com/[^/]+/[^/]+\.git$', link)
     if match:
         project_name_match = re.search(r'/([^/]+)\.git$', link)
         if project_name_match:
-            project_name = project_name_match.group(1)
-            project_path = os.path.join(project_path, project_name)
-            if os.path.exists(project_path):
+            PROJECT_NAME = project_name_match.group(1)
+            PROJECT_PATH = os.path.join(PROJECT_PATH, PROJECT_NAME)
+            if os.path.exists(PROJECT_PATH):
                 try:
-                    shutil.rmtree(project_path, onerror=remove_readonly)
-                    print(f"Deleted directory: {project_path}")
+                    shutil.rmtree(PROJECT_PATH, onerror=remove_readonly)
+                    print(f"Deleted directory: {PROJECT_PATH}")
                 except PermissionError as e:
                     print(f"PermissionError: {e}")
             subprocess.run(['git', 'clone', link], check=True)
@@ -72,6 +77,7 @@ def link_for_clone(link):
     print(f"You entered: {link}")
 
 def delete_old_files(directory):
+    """Deletes old files with '_old.txt' suffix in the given directory."""
     old_files = glob.glob(os.path.join(directory, '*_old.txt'))
     for file in old_files:
         try:
@@ -79,11 +85,12 @@ def delete_old_files(directory):
             print(f"Deleted file: {file}")
         except OSError as e:
             print(f"Error deleting file {file}: {e}")
-            
+
 def rename_old_reports():
-    old_result = os.path.join(project_path, 'result.txt')
-    old_parsed_result = os.path.join(project_path, 'parsed_results.txt')
-    delete_old_files(project_path)
+    """Renames old reports to include '_old.txt' suffix."""
+    old_result = os.path.join(PROJECT_PATH, 'result.txt')
+    old_parsed_result = os.path.join(PROJECT_PATH, 'parsed_results.txt')
+    delete_old_files(PROJECT_PATH)
     if os.path.exists(old_result):
         new_result_name = old_result.replace('.txt', '_old.txt')
         if os.path.exists(new_result_name):
@@ -99,6 +106,7 @@ def rename_old_reports():
         print(f"Renamed {old_parsed_result} to {new_parsed_result_name}")
 
 def generate_report():
+    """Generates a new report for the project."""
     rename_old_reports()
     
     cppcheck_cmd = [
@@ -106,31 +114,33 @@ def generate_report():
         '--enable=all',
         '--inconclusive',
         '--std=c++11',
-        project_path
+        PROJECT_PATH
     ]
     
-    output_file = project_path + '\\result.txt'
-    output_file_parsed = project_path + '\\parsed_results.txt'
+    output_file = os.path.join(PROJECT_PATH, 'result.txt')
+    output_file_parsed = os.path.join(PROJECT_PATH, 'parsed_results.txt')
     
-    with open(output_file, 'w') as file:
-        subprocess.run(cppcheck_cmd, stderr=file)
+    with open(output_file, 'w', encoding='utf-8') as file:
+        subprocess.run(cppcheck_cmd, stderr=file, check=True)
         
-    with open(output_file_parsed, 'w') as file:
-        subprocess.run(['python', 'Parser.py', project_name, 'n'])
+    with open(output_file_parsed, 'w', encoding='utf-8') as file:
+        subprocess.run(['python', 'Parser.py', PROJECT_NAME, 'n'], check=True)
 
 def print_results():
+    """Prompts the user to see the results and prints them."""
     choice = input("Do you wanna see the result? Please respond with 'y' or 'n'. ")
     if choice == 'y':
-        subprocess.run(['python', 'Parser.py', project_name, 'y'])
+        subprocess.run(['python', 'Parser.py', PROJECT_NAME, 'y'], check=True)
     elif choice == 'n':
-        subprocess.run(['python', 'Parser.py', project_name, 'n'])
+        subprocess.run(['python', 'Parser.py', PROJECT_NAME, 'n'], check=True)
     else:
         print("Invalid choice, please choose again.")
         print_results()
 
 def open_test_report():
+    """Opens the test report for a specified repository."""
     choice = input("Please provide name of repo: ")
-    subprocess.run(['python', 'Parser.py', choice, 'y'])
+    subprocess.run(['python', 'Parser.py', choice, 'y'], check=True)
 
 if __name__ == "__main__":
     menu()
