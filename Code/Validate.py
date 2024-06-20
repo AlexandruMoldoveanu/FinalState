@@ -1,10 +1,14 @@
+"""This module validates results by comparing new and old result files."""
+
 import os
 import sys
 
-def check_old_file_exists(old_file_path):
-    return os.path.exists(old_file_path)
+def check_old_file_exists(file_path):
+    """Check if the old file exists."""
+    return os.path.exists(file_path)
 
 def collect_results_from_file(file_path):
+    """Collect results from the given file."""
     if not os.path.exists(file_path):
         print(f"File {file_path} does not exist.")
         return None
@@ -13,7 +17,7 @@ def collect_results_from_file(file_path):
         print(f"Path {file_path} is not a file.")
         return None
 
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
 
     errors_count = extract_count(content, 'Errors')
@@ -30,16 +34,16 @@ def collect_results_from_file(file_path):
         'Notes': notes_count
     }
 
-def compare_results(new_file_path, old_file_path):
-    if check_old_file_exists(old_file_path):
-        new_results = collect_results_from_file(new_file_path)
-        old_results = collect_results_from_file(old_file_path)
+def compare_results(new_file, old_file):
+    """Compare results between the new and old file."""
+    if check_old_file_exists(old_file):
+        new_results = collect_results_from_file(new_file)
+        old_results = collect_results_from_file(old_file)
 
         if new_results and old_results:
             for key in new_results:
                 print(f"{key}: {new_results[key]} (new) vs {old_results[key]} (old)")
 
-            # Verificări suplimentare
             error_increase = new_results['Errors'] - old_results['Errors']
             warning_increase = new_results['Warnings'] - old_results['Warnings']
             info_increase = new_results['Information'] - old_results['Information']
@@ -48,25 +52,25 @@ def compare_results(new_file_path, old_file_path):
 
             if error_increase >= 1:
                 print(f"Error count increased by {error_increase}.")
-                if warning_increase / old_results['Warnings'] >= 0.10:
-                    print(f"Warning count increased by at least 10%.")
-                    if info_increase > 5:
-                        print(f"Information count increased by more than 5.")
-                        if style_increase > 20:
-                            print(f"Style issues count increased by more than 20.")
-                            if notes_increase > 10:
-                                print(f"Notes count increased by more than 10.")
-                                sys.exit(1)
-                            sys.exit(1)
-                        sys.exit(1)
-                    sys.exit(1)
                 sys.exit(1)
-                    
+            if warning_increase / old_results['Warnings'] >= 0.10:
+                print("Warning count increased by at least 10%.")
+                sys.exit(1)
+            if info_increase > 5:
+                print("Information count increased by more than 5.")
+                sys.exit(1)
+            if style_increase > 20:
+                print("Style issues count increased by more than 20.")
+                sys.exit(1)
+            if notes_increase > 10:
+                print("Notes count increased by more than 10.")
+                sys.exit(1)
     else:
-        print(f"Old file {old_file_path} does not exist.")
+        print(f"Old file {old_file} does not exist.")
         sys.exit(1)
 
 def extract_count(content, section_name):
+    """Extract count of a specific section from the content."""
     section_header = f"{section_name} ("
     start_index = content.find(section_header)
     if start_index == -1:
@@ -86,29 +90,24 @@ def extract_count(content, section_name):
     return count
 
 if __name__ == "__main__":
-    # Verifică dacă a fost primit un parametru din linia de comandă
+    """Main entry point of the script."""
     if len(sys.argv) != 2:
         print("Usage: python script.py <path_to_parsed_results.txt>")
         sys.exit(1)
 
     new_file_path = sys.argv[1]
 
-    # Afișează valoarea primită ca parametru
     print(f"Valoare este {new_file_path}")
 
-    # Construiește calea absolută pentru fișierul nou
     new_file_path = os.path.abspath(new_file_path)
 
-    # Verifică și afișează calea corectă pentru fișierul primit
     if not os.path.isfile(new_file_path):
         print(f"The provided path {new_file_path} is not a valid file.")
         sys.exit(1)
 
-    # Construiește calea pentru fișierul vechi
     base_dir = os.path.dirname(new_file_path)
     new_file_name = os.path.basename(new_file_path)
     old_file_name = os.path.splitext(new_file_name)[0] + "_old.txt"
     old_file_path = os.path.join(base_dir, old_file_name)
 
-    # Apelează funcția pentru a verifica și compara rezultatele
     compare_results(new_file_path, old_file_path)
