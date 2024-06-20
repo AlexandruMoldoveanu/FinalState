@@ -31,34 +31,43 @@ F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:1:0: informa
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:15:6: style: Unused variable: t [unusedVariable]
  int t;
      ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:21:10: style: struct member 's::a' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:21:6: style: Unused variable: t [unusedVariable]
+ int t;
+     ^
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:26:6: style: Unused variable: t [unusedVariable]
+ int t;
+     ^
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:31:6: style: Unused variable: t [unusedVariable]
+ int t;
+     ^
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:37:10: style: struct member 's::a' is never used. [unusedStructMember]
   int    a:1;
          ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:22:17: style: struct member 's::b' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:38:17: style: struct member 's::b' is never used. [unusedStructMember]
   unsigned int  b:2;
                 ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:23:16: style: struct member 's::c' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:39:16: style: struct member 's::c' is never used. [unusedStructMember]
   signed int   c:3;
                ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:24:12: style: struct member 's::d' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:40:12: style: struct member 's::d' is never used. [unusedStructMember]
   short    d:4;
            ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:25:11: style: struct member 's::e' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:41:11: style: struct member 's::e' is never used. [unusedStructMember]
   char    e:5;
           ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:26:4: style: Unused variable: bitfield1_t [unusedVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:42:4: style: Unused variable: bitfield1_t [unusedVariable]
  } bitfield1_t;
    ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:31:16: style: struct member 's::a' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:47:16: style: struct member 's::a' is never used. [unusedStructMember]
   signed int   a:1;
                ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:32:16: style: struct member 's::b' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:48:16: style: struct member 's::b' is never used. [unusedStructMember]
   signed int   b:2;
                ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:33:17: style: struct member 's::c' is never used. [unusedStructMember]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:49:17: style: struct member 's::c' is never used. [unusedStructMember]
   unsigned int  c:1;
                 ^
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:34:4: style: Unused variable: bitfield2_t [unusedVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:50:4: style: Unused variable: bitfield2_t [unusedVariable]
  } bitfield2_t;
    ^
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule7.c:1:0: information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
