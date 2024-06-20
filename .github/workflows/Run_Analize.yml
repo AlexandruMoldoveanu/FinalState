@@ -1,4 +1,4 @@
-name: Create-Results and Count MISRA Messages
+name: Run analize
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
           echo "Reading parameters from file..."
           Get-Content GithubRepos.txt | ForEach-Object {
             Write-Host "Running script with parameter: $_"
-            py Interface.py $_
+            py interface_script.py $_
           }
         shell: powershell
 
