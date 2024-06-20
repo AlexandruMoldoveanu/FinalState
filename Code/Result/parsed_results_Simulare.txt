@@ -9,7 +9,7 @@ F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:1:0: informa
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule7.c:1:0: information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 nofile:0:0: information: Active checkers: 114/802 (use --checkers-report=<filename> to see details) [checkersReport]
 
-Style (34):
+Style (46):
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:7:51: style: Variable 'abcdefghijklmnopqrstuvwxyz123456789aaa3' is assigned a value that is never used. [unreadVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:8:51: style: Variable 'abcdefghijklmnopqrstuvwxyz123456789aaa4' is assigned a value that is never used. [unreadVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:9:51: style: Variable 'abcdefghijklmnopqrstuvwxyz123456789aaa5' is assigned a value that is never used. [unreadVariable]
@@ -24,6 +24,10 @@ F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:22:12: style
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:26:12: style: Local variable 'var2' shadows outer variable [shadowVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:30:12: style: Local variable 'var3' shadows outer variable [shadowVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:34:12: style: Local variable 'var4' shadows outer variable [shadowVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:38:12: style: Local variable 'var1' shadows outer variable [shadowVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:42:12: style: Local variable 'var2' shadows outer variable [shadowVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:46:12: style: Local variable 'var3' shadows outer variable [shadowVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:50:12: style: Local variable 'var4' shadows outer variable [shadowVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:20:15: style: Variable 'var1' is assigned a value that is never used. [unreadVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:22:17: style: Variable 'var1' is assigned a value that is never used. [unreadVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:24:15: style: Variable 'var2' is assigned a value that is never used. [unreadVariable]
@@ -32,6 +36,14 @@ F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:28:15: style
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:30:17: style: Variable 'var3' is assigned a value that is never used. [unreadVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:32:15: style: Variable 'var4' is assigned a value that is never used. [unreadVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:34:17: style: Variable 'var4' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:36:15: style: Variable 'var5' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:38:17: style: Variable 'var1' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:40:15: style: Variable 'var6' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:42:17: style: Variable 'var2' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:44:15: style: Variable 'var7' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:46:17: style: Variable 'var3' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:48:15: style: Variable 'var8' is assigned a value that is never used. [unreadVariable]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:50:17: style: Variable 'var4' is assigned a value that is never used. [unreadVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:15:6: style: Unused variable: t [unusedVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:21:10: style: struct member 's::a' is never used. [unusedStructMember]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:22:17: style: struct member 's::b' is never used. [unusedStructMember]
@@ -45,7 +57,7 @@ F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:33:17: style
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:34:4: style: Unused variable: bitfield2_t [unusedVariable]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule7.c:7:16: style: Variable 'octal' is assigned a value that is never used. [unreadVariable]
 
-Notes (8):
+Notes (16):
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:20:10: note: Shadowed declaration
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:22:12: note: Shadow variable
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:24:10: note: Shadowed declaration
@@ -54,3 +66,11 @@ F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:28:10: note:
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:30:12: note: Shadow variable
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:32:10: note: Shadowed declaration
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:34:12: note: Shadow variable
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:20:10: note: Shadowed declaration
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:38:12: note: Shadow variable
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:24:10: note: Shadowed declaration
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:42:12: note: Shadow variable
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:28:10: note: Shadowed declaration
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:46:12: note: Shadow variable
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:32:10: note: Shadowed declaration
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:50:12: note: Shadow variable
