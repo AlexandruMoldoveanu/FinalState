@@ -1,6 +1,4 @@
-"""
-Module for collecting and sending metrics to InfluxDB.
-"""
+"""Module for collecting and sending metrics to InfluxDB."""
 
 import os
 import time

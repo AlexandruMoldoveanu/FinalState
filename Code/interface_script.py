@@ -36,7 +36,6 @@ def menu():
                 link = input("Please enter a link: ")
                 link_for_clone(link)
                 generate_report()
-                print_results()
             elif choice == '3':
                 open_test_report()
             elif choice == '4':
@@ -124,23 +123,12 @@ def generate_report():
         subprocess.run(cppcheck_cmd, stderr=file, check=True)
         
     with open(output_file_parsed, 'w', encoding='utf-8') as file:
-        subprocess.run(['python', 'Parser.py', PROJECT_NAME, 'n'], check=True)
-
-def print_results():
-    """Prompts the user to see the results and prints them."""
-    choice = input("Do you wanna see the result? Please respond with 'y' or 'n'. ")
-    if choice == 'y':
-        subprocess.run(['python', 'Parser.py', PROJECT_NAME, 'y'], check=True)
-    elif choice == 'n':
-        subprocess.run(['python', 'Parser.py', PROJECT_NAME, 'n'], check=True)
-    else:
-        print("Invalid choice, please choose again.")
-        print_results()
+        subprocess.run(['python', 'parser_script.py', PROJECT_NAME, 'n'], check=True)
 
 def open_test_report():
     """Opens the test report for a specified repository."""
     choice = input("Please provide name of repo: ")
-    subprocess.run(['python', 'Parser.py', choice, 'y'], check=True)
+    subprocess.run(['python', 'parser_script.py', choice, 'y'], check=True)
 
 if __name__ == "__main__":
     menu()

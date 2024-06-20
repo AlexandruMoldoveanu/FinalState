@@ -103,11 +103,11 @@ if __name__ == "__main__":
     errors, warnings, information, style, notes = parse_log_file(input_file_path)
     save_results(errors, warnings, information, style, notes, output_file_path)
     
-    subprocess.run(['python', 'Influx.py'], check=True)
+    subprocess.run(['python', 'influx_script.py'], check=True)
     
     if os.path.exists(output_file_path):
         try:
-            subprocess.run(['python', 'Validate.py', output_file_path], check=True)
+            subprocess.run(['python', 'validate_script.py', output_file_path], check=True)
         except subprocess.CalledProcessError as e:
             print(f"An error occurred while running Validate.py: {e}")
     else:
