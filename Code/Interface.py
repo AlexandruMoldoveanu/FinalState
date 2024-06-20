@@ -18,10 +18,10 @@ def menu():
         generate_report()
     else:
         while True:
-            print("What do you wanna do?")
+            print("What do you want to do?")
             print("1. Clone a repository")
-            print("2. Clone and generate a new report")
-            print("3. Open last report")
+            print("2. Clone a repository and generate a new report for all listed projects")
+            print("3. Open last report for all listed projects")
             print("4. Exit")
 
             choice = input("Please choose an option (1-4): ")
@@ -122,10 +122,9 @@ def print_results():
     choice = input("Do you wanna see the result? Please respond with 'y' or 'n'. ")
     if choice == 'y':
         subprocess.run(['python', 'Parser.py', project_name, 'y'])
-    else
-    if choice == 'n':
+    elif choice == 'n':
         subprocess.run(['python', 'Parser.py', project_name, 'n'])
-    else
+    else:
         print("Invalid choice, please choose again.")
         print_results()
 
