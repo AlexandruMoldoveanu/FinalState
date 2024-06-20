@@ -43,6 +43,14 @@ def parse_log_file(file_path):
         return [], [], [], [], []
 
 def save_results(errors, warnings, information, style, notes, output_file):
+    if os.path.exists(output_file):
+        old_output_file = output_file.replace(".txt", "_old.txt")
+
+        if os.path.exists(old_output_file):
+            os.remove(old_output_file)
+
+        os.rename(output_file, old_output_file)
+        
     if not errors and not warnings and not information and not style and not notes:
         print(f"No results to save in {output_file}")
         return
@@ -78,49 +86,12 @@ def print_file_contents(file_path):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-def compare_results(new_counts, old_counts):
-    diff_threshold = 0.1
-    for key in new_counts:
-        if key in old_counts:
-            diff = new_counts[key] - old_counts[key]
-            if old_counts[key] > 0 and diff / old_counts[key] > diff_threshold:
-                raise ValueError(f"{key.capitalize()} increased by more than 10%")
-
-def get_counts(file_path):
-    counts = {}
-    try:
-        with open(file_path, 'r') as file:
-            for line in file:
-                if line.startswith('Errors'):
-                    counts['errors'] = int(re.search(r'\((\d+)\)', line).group(1))
-                elif line.startswith('Warnings'):
-                    counts['warnings'] = int(re.search(r'\((\d+)\)', line).group(1))
-                elif line.startswith('Information'):
-                    counts['information'] = int(re.search(r'\((\d+)\)', line).group(1))
-                elif line.startswith('Style'):
-                    counts['style'] = int(re.search(r'\((\d+)\)', line).group(1))
-                elif line.startswith('Notes'):
-                    counts['notes'] = int(re.search(r'\((\d+)\)', line).group(1))
-    except FileNotFoundError:
-        print(f"Error: The file at {file_path} does not exist.")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    return counts
-
 if __name__ == "__main__":
     input_file_path = project_name + '\\result.txt'
-    output_file_path = project_name + '\\parsed_results.txt'
-    old_file_path = project_name + '\\parsed_results_old.txt'
+    current_directory = os.getcwd()
+    target_dir = os.path.abspath(os.path.join(current_directory, 'Result'))
+    output_file_path = target_dir + '\\'+ project_name + '_parsed_results.txt'
 
     errors, warnings, information, style, notes = parse_log_file(input_file_path)
     save_results(errors, warnings, information, style, notes, output_file_path)
-
-    if check == 'y':
-        print_file_contents(output_file_path)
-
-    if os.path.exists(old_file_path):
-        new_counts = get_counts(output_file_path)
-        old_counts = get_counts(old_file_path)
-        compare_results(new_counts, old_counts)
-
-    subprocess.run(['python', 'Influx.py'])
+    subprocess.run(['python', 'Validate.py', output_file_path])
