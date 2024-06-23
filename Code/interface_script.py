@@ -22,23 +22,26 @@ def menu():
     else:
         while True:
             print("What do you want to do?")
-            print("1. Clone a repository")
-            print("2. Clone a repository and generate a new report for all listed projects")
-            print("3. Open last report for all listed projects")
-            print("4. Exit")
+            print("1. Clone a repository.")
+            print("2. Clone a repository and generate a new report for all listed projects.")
+            print("3. Open last report for all listed projects.")
+            print("4. Open compare results for a project.")
+            print("5. Exit.")
 
-            choice = input("Please choose an option (1-4): ")
+            choice = input("Please choose an option (1-5): ")
 
             if choice == '1':
-                link = input("Please enter a link: ")
+                link = input("Please provide the link to clone the GitHub repository:")
                 link_for_clone(link)
             elif choice == '2':
-                link = input("Please enter a link: ")
+                link = input("Please provide the link to clone the GitHub repository:")
                 link_for_clone(link)
                 generate_report()
             elif choice == '3':
                 open_test_report()
             elif choice == '4':
+                open_compared_results()
+            elif choice == '5':
                 print("Exiting...")
                 break
             else:
@@ -127,8 +130,16 @@ def generate_report():
 
 def open_test_report():
     """Opens the test report for a specified repository."""
-    choice = input("Please provide name of repo: ")
+    choice = input("Please provide the name of the GitHub repository:")
     subprocess.run(['python', 'parser_script.py', choice, 'y'], check=True)
 
+def open_compared_results():
+    """Opens the compare for a specified repository."""
+    choice = input("Please provide the name of the GitHub repository:")
+    current_directory = os.getcwd()
+    target_dir = os.path.abspath(os.path.join(current_directory, 'Result'))
+    output_file_path = os.path.join(target_dir, f'{choice}_parsed_results.txt')
+    subprocess.run(['python', 'validate_script.py', output_file_path], check=True)
+    
 if __name__ == "__main__":
     menu()

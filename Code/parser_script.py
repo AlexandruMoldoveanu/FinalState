@@ -86,6 +86,7 @@ def print_file_contents(file_path):
             print(contents)
     except FileNotFoundError:
         print(f"Error: The file at {file_path} does not exist.")
+        print(f"Please check if the repository exists and if the report was generated.")
     except OSError as e:
         print(f"An OS error occurred: {e}")
 
@@ -93,22 +94,28 @@ def print_file_contents(file_path):
 if __name__ == "__main__":
     """Main entry point of the script."""
     project_name = sys.argv[1]
-    check = sys.argv[2]
+    print_check = sys.argv[2]
 
     input_file_path = os.path.join(project_name, 'result.txt')
-    current_directory = os.getcwd()
-    target_dir = os.path.abspath(os.path.join(current_directory, 'Result'))
-    output_file_path = os.path.join(target_dir, f'{project_name}_parsed_results.txt')
-
-    errors, warnings, information, style, notes = parse_log_file(input_file_path)
-    save_results(errors, warnings, information, style, notes, output_file_path)
+    if print_check == 'n':
+        current_directory = os.getcwd()
+        target_dir = os.path.abspath(os.path.join(current_directory, 'Result'))
+        output_file_path = os.path.join(target_dir, f'{project_name}_parsed_results.txt')
+        print(f"path is {output_file_path}")
+        errors, warnings, information, style, notes = parse_log_file(input_file_path)
+        save_results(errors, warnings, information, style, notes, output_file_path)
     
-    subprocess.run(['python', 'influx_script.py'], check=True)
+        subprocess.run(['python', 'influx_script.py'], check=True)
     
-    if os.path.exists(output_file_path):
-        try:
-            subprocess.run(['python', 'validate_script.py', output_file_path], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while running Validate.py: {e}")
+        if os.path.exists(output_file_path):
+            try:
+                subprocess.run(['python', 'validate_script.py', output_file_path], check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred while running Validate.py: {e}")
+        else:
+            print(f"Error: The file {output_file_path} does not exist.")
+    elif print_check == 'y':
+        print_file_contents(input_file_path)
     else:
-        print(f"Error: The file {output_file_path} does not exist.")
+        print(f"Error: Parameter print_check has value:{print_check} witch is not recognize.")
+        sys.exit(1)
