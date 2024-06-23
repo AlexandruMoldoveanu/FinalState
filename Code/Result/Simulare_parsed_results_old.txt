@@ -1,22 +1,21 @@
 Errors (12):
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: ''. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_1'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_2'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_3'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_3_1'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_3_2'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_3_99'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_3_999'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_3_9999'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_4'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_4_1'. [syntaxError]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:187:1: error: Unmatched '}'. Configuration: 'Rule_5_5'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: ''. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_1'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_2'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_3'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_3_1'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_3_2'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_4'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_4_1'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_5'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_6_1'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_7'. [syntaxError]
+F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:135:1: error: Unmatched '}'. Configuration: 'Rule_5_7_1'. [syntaxError]
 
 Warnings (0):
 
-Information (6):
+Information (5):
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\main.c:1:0: information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
-F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:0:0: information: Too many #ifdef configurations - cppcheck only checks 12 of 17 configurations. Use --force to check all configurations. [toomanyconfigs]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule5.c:1:0: information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule6.c:1:0: information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 F:\actions-runner\_work\FinalState\FinalState\Code\Simulare\Rule7.c:1:0: information: Include file: <stdint.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
