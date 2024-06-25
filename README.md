@@ -1,5 +1,5 @@
 Status:<br>
-[![CI-Build](https://github.com/AlexandruMoldoveanu/FinalState/actions/workflows/build.yml/badge.svg)](https://github.com/AlexandruMoldoveanu/FinalState/actions/workflows/build.yml)<br>
+[![Run analize](https://github.com/AlexandruMoldoveanu/FinalState/actions/workflows/Run_Analize.yml/badge.svg)](https://github.com/AlexandruMoldoveanu/FinalState/actions/workflows/Run_Analize.yml)<br>
 1.Pregatirea configuratiei.<br>
 2.Configurare runner.<br>
 3.Testare reusita pentru un Hello Word<br>
