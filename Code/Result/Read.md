@@ -1,0 +1,1 @@
+Acest fisier exista doar pentru a nu se sterge folderul Result.
